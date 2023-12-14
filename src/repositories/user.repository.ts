@@ -112,6 +112,18 @@ export class UserRepository extends Repository<User> {
     await this.sessionRepository.save(session);
   }
 
+  async findById(id: number) {
+    const user = await this.userRepository.findOne({ where: { id: id } });
+    return user;
+  }
+
+  async findSessionToken(token: string) {
+    const session = await this.sessionRepository.findOne({
+      where: { token: token },
+    });
+    return session;
+  }
+
   async generateToken(user: User) {
     const saltOrRounds = 10;
     const payload = { sub: user.id, username: user.username };

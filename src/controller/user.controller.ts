@@ -3,13 +3,14 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { UserService } from 'src/services/user.service';
 
 @Controller('user')
-@ApiTags('users')
+@ApiTags('User Management')
 @ApiBearerAuth()
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get('info')
   getInfo(@Request() req) {
-    return this.userService.getInfo(1);
+    console.log('user', req.user);
+    return this.userService.getInfo(req.user.id);
   }
 }
