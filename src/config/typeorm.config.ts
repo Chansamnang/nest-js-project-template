@@ -1,7 +1,7 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 const username = process.env.DB_USERNAME || 'root';
-const password = process.env.DB_PASSWORD || '123456';
-const dbName = process.env.DB_NAME || 'testdb';
+const password = process.env.DB_PASSWORD || 'your_password';
+const dbName = process.env.DB_NAME || 'mydb';
 const synchronize = process.env.NODE_ENV === 'production' ? false : true;
 
 export const typeOrmConfig: TypeOrmModuleOptions = {

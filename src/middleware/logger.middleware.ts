@@ -1,6 +1,5 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Log } from 'src/entities/log.entity';
 import { LogRepository } from 'src/repositories/log.repository';
 import { getClientIpUtil } from 'src/utils/get-client-ip.util';
 
@@ -15,7 +14,10 @@ export class LoggerMiddleware implements NestMiddleware {
       method: req.method,
       url: req.originalUrl,
       hostname: req.hostname,
-      request_body: JSON.stringify(req.body) === '{}' ? req.query : req.body,
+      request_body:
+        JSON.stringify(req.body) === '{}'
+          ? JSON.stringify(req.query)
+          : JSON.stringify(req.body),
       status_code: res.statusCode,
       platform:
         req.headers['sec-ch-ua-platform'] || req.headers['sec-ch-ua-mobile'],
@@ -23,7 +25,7 @@ export class LoggerMiddleware implements NestMiddleware {
       requested_by: req?.user?.username || 'guest',
       user_agent: req.headers['user-agent'],
     });
-    console.log(log);
+    this.logRepository.save(log);
     next();
   }
 }
