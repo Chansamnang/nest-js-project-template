@@ -11,17 +11,27 @@ import { Session } from './entities/session.entity';
 import { UserController } from './controller/user.controller';
 import { UserService } from './services/user.service';
 import { AuthMiddleware } from './middleware/auth.middleware';
+import { LoggerMiddleware } from './middleware/logger.middleware';
+import { LogRepository } from './repositories/log.repository';
+import { Log } from './entities/log.entity';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot(typeOrmConfig),
-    TypeOrmModule.forFeature([User, Session]),
+    TypeOrmModule.forFeature([User, Session, Log]),
   ],
   controllers: [AuthController, UserController],
-  providers: [AppService, AuthService, UserRepository, JwtService, UserService],
+  providers: [
+    AppService,
+    AuthService,
+    UserRepository,
+    JwtService,
+    UserService,
+    LogRepository,
+  ],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(AuthMiddleware).forRoutes('*');
+    consumer.apply(AuthMiddleware, LoggerMiddleware).forRoutes('*');
   }
 }

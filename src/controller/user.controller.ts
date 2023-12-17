@@ -10,7 +10,6 @@ export class UserController {
 
   @Get('info')
   getInfo(@Request() req) {
-    console.log('user', req.user);
     return this.userService.getInfo(req.user.id);
   }
 }

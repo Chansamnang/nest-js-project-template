@@ -34,14 +34,12 @@ export class AuthMiddleware implements NestMiddleware {
           secret: process.env.JWT_SECRET,
         });
 
-        const user = await this.userRepository.findById(decoded.sub.id);
+        const user = await this.userRepository.findById(decoded.sub);
 
         if (!user.status) {
           throw new UnauthorizedException('unauthorized access');
         }
-
-        const { password, ...others } = user;
-        req.user = others;
+        req.user = user;
         req.user.token = token;
         next();
       } else {

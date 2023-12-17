@@ -58,7 +58,6 @@ export class UserRepository extends Repository<User> {
     const user = await this.userRepository.findOne({
       where: { username: username },
     });
-    console.log(user);
     if (!user) {
       throw new NotFoundException('User not found');
     }
@@ -114,7 +113,9 @@ export class UserRepository extends Repository<User> {
 
   async findById(id: number) {
     const user = await this.userRepository.findOne({ where: { id: id } });
-    return user;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password, ...others } = user;
+    return others;
   }
 
   async findSessionToken(token: string) {
